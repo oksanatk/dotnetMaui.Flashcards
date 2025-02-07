@@ -1,8 +1,8 @@
 namespace dotnetMAUI.Flashcards.Views;
 
-public partial class ManageStacksFlashcardsPage : ContentPage
+public partial class ManageStacksPage : ContentPage
 {
-	public ManageStacksFlashcardsPage()
+	public ManageStacksPage()
 	{
 		InitializeComponent();
 	}

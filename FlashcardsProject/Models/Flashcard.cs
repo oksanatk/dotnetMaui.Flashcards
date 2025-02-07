@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-namespace dotnetMAUI.Flashcards.Models;
+﻿namespace dotnetMAUI.Flashcards.Models;
 internal class Flashcard
 {
     public int Id { get; set; }
