@@ -13,14 +13,38 @@
             <Label 
                 Text="Manage Stacks"
                 VerticalOptions="Center" 
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center" 
+                FontSize="28"/>
 
-            <Grid RowDefinitions="50"
+            <Grid 
+                Padding="50,15,50,10"
+                RowDefinitions="50"
                   ColumnDefinitions="*,*,*,*">
                 <Label Grid.Column="0" Text="Stack ID"/>
                 <Label Grid.Column="1" Text="Name"/>
             </Grid>
 
+            <CollectionView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowDefinitions="*,50"
+                              ColumnDefinitions="*,*,*,*">
+
+                            <Label Grid.Column="0" Text="{Binding StackId}"/>
+                            <Label Grid.Column="1" Text="{Binding StackName}"/>
+
+                            <Button Grid.Column="2" Text="Modify" Command="{Binding ModifyStackCommand}"/>
+                            <Button Grid.Column="3" Text="Delete" Command="{Binding DeleteStackCommand}"/>
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button
+                Text="Back to Home"
+                Command="{Binding GoBackHomeCommand}"
+                MaximumWidthRequest="200"/>
 
         </VerticalStackLayout>
     </ScrollView>

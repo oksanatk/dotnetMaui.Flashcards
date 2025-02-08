@@ -4,10 +4,43 @@
              xmlns:viewmodels="clr-namespace:dotnetMAUI.Flashcards.ViewModels"
              x:Class="dotnetMAUI.Flashcards.Views.PreviousSessionsPage"
              x:DataType="viewmodels:PreviousSessionsViewModel">
-    <VerticalStackLayout>
-        <Label 
+    <ContentPage.BindingContext>
+        <viewmodels:PreviousSessionsViewModel/>
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label 
             Text="Previous Study Sessions"
             VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+            HorizontalOptions="Center" 
+            FontSize="32"/>
+            <Grid Padding="50,10,50,10"
+              RowDefinitions="*,50"
+              ColumnDefinitions="*,*,*">
+                <Label Grid.Column="0" Text="Date Studied"/>
+                <Label Grid.Column="1" Text="Stack Studied"/>
+                <Label Grid.Column="2" Text="Score"/>
+            </Grid>
+
+            <CollectionView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowDefinitions="*,50"
+                          ColumnDefinitions="*,*,*">
+                            <Label Grid.Column="0" Text="{Binding DateStudied}"/>
+                            <Label Grid.Column="1" Text="{Binding StackName}"/>
+                            <Label Grid.Column="2" Text="{Binding Score}"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button
+                Text="Back to Home"
+                Command="{Binding GoBackHomeCommand}"
+                MaximumWidthRequest="200"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

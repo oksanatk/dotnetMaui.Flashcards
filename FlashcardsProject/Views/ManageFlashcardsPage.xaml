@@ -7,10 +7,44 @@
     <ContentPage.BindingContext>
         <viewmodels:ManageFlashcardsViewModel/>
     </ContentPage.BindingContext>
-    <VerticalStackLayout>
-        <Label 
-            Text="Manage Flashcards"
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label 
+            Text="Manage Flashcards in {Binding StackName}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+            <Grid Padding="50,10,50,10"
+                  RowDefinitions="*,50"
+                  ColumnDefinitions="*,*,*,*,*">
+                <Label Grid.Column="0" Text="ID"/>
+                <Label Grid.Column="1" Text="Front"/>
+                <Label Grid.Column="2" Text="Back"/>
+            </Grid>
+
+            <CollectionView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowDefinitions="*,50"
+                              ColumnDefinitions="*,*,*,*,*">
+                            <Label Grid.Column="0" Text="{Binding FlashcardId}"/>
+                            <Label Grid.Column="1" Text="{Binding FlashcardFront}"/>
+                            <Label Grid.Column="2" Text="{Binding FlashcardBack}"/>
+
+                            <Button Grid.Column="3" Text="Modify" Command="{Binding ModifyFlashcardCommand}"/>
+                            <Button Grid.Column="4" Text="Delete" Command="{Binding ModifyStackCommand}"/>
+                            
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+            <Button
+                Text="Back to Home"
+                Command="{Binding GoBackHomeCommand}"
+                MaximumWidthRequest="200"/>
+            
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

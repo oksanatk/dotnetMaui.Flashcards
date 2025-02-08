@@ -8,10 +8,29 @@
         <viewmodels:StudyViewModel/>
     </ContentPage.BindingContext>
     
-    <VerticalStackLayout>
+    <VerticalStackLayout
+        Spacing="20">
+        
         <Label 
             Text="Study"
             VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            HorizontalOptions="Center" 
+            FontSize="32"/>
+        
+        <VerticalStackLayout
+            Spacing="20">
+            <Label Text="{Binding FlashcardFront}"/>
+            <Entry Placeholder="Your Answer"/>
+            <Button Text="Submit"
+                    MaximumWidthRequest="100"/>
+        </VerticalStackLayout>
+
+        <Label IsVisible="false"
+               Text="{Binding ScoreText}"/>
+        <Button
+                Text="Back to Home"
+                Command="{Binding GoBackHomeCommand}"
+                MaximumWidthRequest="200"/>
+        
     </VerticalStackLayout>
 </ContentPage>
