@@ -9,7 +9,8 @@
     </ContentPage.BindingContext>
 
     <ScrollView>
-        <VerticalStackLayout>
+        <VerticalStackLayout
+            Spacing="10">
             <Label 
             Text="Manage Flashcards in {Binding StackName}"
             VerticalOptions="Center" 
@@ -39,7 +40,12 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            
+
+            <Button 
+                    Text="Add a New Flashcard"
+                    Command="{Binding NewFlashcardCommand}"
+                    MaximumWidthRequest="300"/>
+
             <Button
                 Text="Back to Home"
                 Command="{Binding GoBackHomeCommand}"

@@ -6,7 +6,7 @@ namespace dotnetMAUI.Flashcards.Data;
 public class AppDbContext : DbContext
 {
     public DbSet<StudySession> StudySessions { get; set; }
-    public DbSet<Stack> Stacks { get; set; }
+    public DbSet<FlashcardStack> Stacks { get; set; }
     public DbSet<Flashcard> Flashcards { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,7 +26,6 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        base.OnConfiguring(optionsBuilder);
         optionsBuilder.UseSqlServer(@"Server=(localdb)\FlashcardsProject;Database=FlashcardsDB;Integrated Security=True;");
     }
 }

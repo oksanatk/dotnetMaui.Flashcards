@@ -4,12 +4,10 @@
              xmlns:viewmodels="clr-namespace:dotnetMAUI.Flashcards.ViewModels"
              x:Class="dotnetMAUI.Flashcards.Views.ManageStacksPage"
              x:DataType="viewmodels:ManageStacksViewModel">
-    <ContentPage.BindingContext>
-        <viewmodels:ManageStacksViewModel/>
-    </ContentPage.BindingContext>
 
     <ScrollView>
-        <VerticalStackLayout>
+        <VerticalStackLayout
+            Spacing="10">
             <Label 
                 Text="Manage Stacks"
                 VerticalOptions="Center" 
@@ -24,14 +22,14 @@
                 <Label Grid.Column="1" Text="Name"/>
             </Grid>
 
-            <CollectionView>
+            <CollectionView ItemsSource="{Binding AllStacks}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid RowDefinitions="*,50"
                               ColumnDefinitions="*,*,*,*">
 
-                            <Label Grid.Column="0" Text="{Binding StackId}"/>
-                            <Label Grid.Column="1" Text="{Binding StackName}"/>
+                            <Label Grid.Column="0" Text="{Binding Id}"/>
+                            <Label Grid.Column="1" Text="{Binding Name}"/>
 
                             <Button Grid.Column="2" Text="Modify" Command="{Binding ModifyStackCommand}"/>
                             <Button Grid.Column="3" Text="Delete" Command="{Binding DeleteStackCommand}"/>
@@ -40,6 +38,11 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
+            <Button 
+                    Text="Add a New Stack"
+                    Command="{Binding NewStackCommand}"
+                    MaximumWidthRequest="300"/>
 
             <Button
                 Text="Back to Home"

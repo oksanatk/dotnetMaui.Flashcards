@@ -10,6 +10,6 @@ public class StudySession
     public int Score { get; set; }
     [ForeignKey(nameof(StackId))]
     public int StackId { get; set; }
-    public Stack Stack { get; set; } = null!;
+    public FlashcardStack Stack { get; set; } = null!;
 }
 
