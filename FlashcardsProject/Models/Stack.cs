@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace dotnetMAUI.Flashcards.Models;
-public class FlashcardStack
+public class Stack
 {
     [Key]
     public int Id { get; set; }

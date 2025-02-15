@@ -2,11 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:dotnetMAUI.Flashcards.ViewModels"
+             xmlns:models="clr-namespace:dotnetMAUI.Flashcards.Models"
              x:Class="dotnetMAUI.Flashcards.Views.ManageStacksPage"
              x:DataType="viewmodels:ManageStacksViewModel">
 
     <ScrollView>
         <VerticalStackLayout
+            Padding="15,20,15,50"
             Spacing="10">
             <Label 
                 Text="Manage Stacks"
@@ -24,15 +26,21 @@
 
             <CollectionView ItemsSource="{Binding AllStacks}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="{x:Type models:Stack}">
                         <Grid RowDefinitions="*,50"
-                              ColumnDefinitions="*,*,*,*">
+                              ColumnDefinitions="*,*,*,*"
+                              Padding="50,15,50,10">
 
-                            <Label Grid.Column="0" Text="{Binding Id}"/>
+                            <Label Grid.Column="0" Text="{Binding Id}" />
                             <Label Grid.Column="1" Text="{Binding Name}"/>
 
-                            <Button Grid.Column="2" Text="Modify" Command="{Binding ModifyStackCommand}"/>
-                            <Button Grid.Column="3" Text="Delete" Command="{Binding DeleteStackCommand}"/>
+                            <Button Grid.Column="2" 
+                                    Text="Modify" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageStacksViewModel}}, Path=ModifyStackCommand}"
+                                    CommandParameter="{Binding Id}"/>
+                            <Button Grid.Column="3" 
+                                    Text="Delete" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageStacksViewModel}}, Path=DeleteStackCommand}"/>
 
                         </Grid>
                     </DataTemplate>

@@ -23,8 +23,10 @@ public static class MauiProgram
         builder.Services.AddTransient<DbRepository>();
         builder.Services.AddTransient<ManageStacksViewModel>();
         builder.Services.AddTransient<ManageStacksPage>();
-        builder.Services.AddSingleton<MainPage>();
-        builder.Services.AddSingleton<AppShell>();
+        builder.Services.AddTransient<ManageFlashcardsPage>();
+        builder.Services.AddTransient<ManageFlashcardsViewModel>();
+        //builder.Services.AddSingleton<MainPage>();
+        //builder.Services.AddSingleton<AppShell>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

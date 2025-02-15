@@ -2,17 +2,17 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:dotnetMAUI.Flashcards.ViewModels"
+             xmlns:models="clr-namespace:dotnetMAUI.Flashcards.Models"
              x:Class="dotnetMAUI.Flashcards.Views.ManageFlashcardsPage"
              x:DataType="viewmodels:ManageFlashcardsViewModel">
-    <ContentPage.BindingContext>
-        <viewmodels:ManageFlashcardsViewModel/>
-    </ContentPage.BindingContext>
 
     <ScrollView>
         <VerticalStackLayout
-            Spacing="10">
+            Spacing="10"
+            Padding="15,20,15,50">
+            
             <Label 
-            Text="Manage Flashcards in {Binding StackName}"
+            Text="{Binding StackTitle}"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
@@ -24,17 +24,22 @@
                 <Label Grid.Column="2" Text="Back"/>
             </Grid>
 
-            <CollectionView>
+            <CollectionView ItemsSource="{Binding AllFlashcards}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="{x:Type models:FlashcardDTO}">
                         <Grid RowDefinitions="*,50"
-                              ColumnDefinitions="*,*,*,*,*">
-                            <Label Grid.Column="0" Text="{Binding FlashcardId}"/>
-                            <Label Grid.Column="1" Text="{Binding FlashcardFront}"/>
-                            <Label Grid.Column="2" Text="{Binding FlashcardBack}"/>
+                              ColumnDefinitions="*,*,*,*,*"
+                              Padding="50,10,50,10">
+                            <Label Grid.Column="0" Text="{Binding Id}"/>
+                            <Label Grid.Column="1" Text="{Binding Front}"/>
+                            <Label Grid.Column="2" Text="{Binding Back}"/>
 
-                            <Button Grid.Column="3" Text="Modify" Command="{Binding ModifyFlashcardCommand}"/>
-                            <Button Grid.Column="4" Text="Delete" Command="{Binding ModifyStackCommand}"/>
+                            <Button Grid.Column="3" 
+                                    Text="Modify" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageFlashcardsViewModel}}, Path=ModifyFlashcardCommand}"/>
+                            <Button Grid.Column="4" 
+                                    Text="Delete" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageFlashcardsViewModel}}, Path=DeleteFlashcardCommand}"/>
                             
                         </Grid>
                     </DataTemplate>
@@ -47,8 +52,8 @@
                     MaximumWidthRequest="300"/>
 
             <Button
-                Text="Back to Home"
-                Command="{Binding GoBackHomeCommand}"
+                Text="Back to Stacks"
+                Command="{Binding GoBackToStacksCommand}"
                 MaximumWidthRequest="200"/>
             
         </VerticalStackLayout>

@@ -8,10 +8,10 @@ using System.ComponentModel;
 
 namespace dotnetMAUI.Flashcards.ViewModels;
 
-public partial class ManageStacksViewModel : ObservableObject
+public partial class ManageStacksViewModel : ObservableObject, INotifyPropertyChanged
 {
     private readonly DbRepository _repository;
-    public ObservableCollection<FlashcardStack> AllStacks { get; set; } = new();
+    public ObservableCollection<Stack> AllStacks { get; set; } = new();
 
     public ManageStacksViewModel(DbRepository repository)
     {
@@ -28,7 +28,7 @@ public partial class ManageStacksViewModel : ObservableObject
     {
         AllStacks.Clear();
         var stacks = await _repository.GetAllStacksAsync();
-        foreach (FlashcardStack s in stacks)
+        foreach (Stack s in stacks)
         {
             AllStacks.Add(s);
         }
@@ -38,7 +38,7 @@ public partial class ManageStacksViewModel : ObservableObject
 
 
     [RelayCommand]
-    Task ModifyStack(int stackId) => Shell.Current.GoToAsync(nameof(ManageFlashcardsPage));
+    Task ModifyStack(int stackId) => Shell.Current.GoToAsync($"{nameof(ManageFlashcardsPage)}?StackId={stackId}");
 
     [RelayCommand]
     Task GoBackHome() => Shell.Current.GoToAsync("..");
