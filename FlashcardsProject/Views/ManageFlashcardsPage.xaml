@@ -24,7 +24,10 @@
                 <Label Grid.Column="2" Text="Back"/>
             </Grid>
 
-            <CollectionView ItemsSource="{Binding AllFlashcards}">
+            <Label Text="{Binding IsNotCreatingFlashcard}"/>
+
+            <CollectionView ItemsSource="{Binding AllFlashcards}"
+                            IsVisible="{Binding IsNo}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:FlashcardDTO}">
                         <Grid RowDefinitions="*,50"
@@ -48,8 +51,19 @@
 
             <Button 
                     Text="Add a New Flashcard"
-                    Command="{Binding NewFlashcardCommand}"
+                    Command="{Binding NewFlashcardButtonCommand}"
                     MaximumWidthRequest="300"/>
+            
+            <VerticalStackLayout
+                IsVisible="{Binding IsCreatingFlashcard}">
+                <Label Text="Input New Flashcard Info:"/>
+                <Entry Placeholder="Front Text"
+                       Text="{Binding NewFront, Mode=TwoWay}"/>
+                <Entry Placeholder="Back Text"
+                       Text="{Binding NewBack, Mode=TwoWay}"/>
+                <Button Text="Submit"
+                        Command="{Binding SubmitNewFlashcardInfoCommand}"/>
+            </VerticalStackLayout>
 
             <Button
                 Text="Back to Stacks"

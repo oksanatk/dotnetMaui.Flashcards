@@ -1,5 +1,6 @@
 ﻿using dotnetMAUI.Flashcards.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace dotnetMAUI.Flashcards.Data;
 
@@ -37,8 +38,14 @@ public class DbRepository
             .ToList();
     }
 
-    internal Stack GetStackById(int stackId)
+    public Stack GetStackById(int stackId)
     {
         return _context.Stacks.Find(stackId);
+    }
+
+    public void CreateNewFlashcard(int stackId, string front, string back)
+    {
+        _context.Flashcards.Add(new Flashcard { StackId = stackId, Front = front, Back = back });
+        _context.SaveChanges();
     }
 }
