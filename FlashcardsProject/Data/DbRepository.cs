@@ -64,6 +64,12 @@ public class DbRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task CreateNewStudySession(DateTime dateStudied, int score, int stackId)
+    {
+        await _context.StudySessions.AddAsync(new StudySession { StackId = stackId, Score = score, DateStudied = dateStudied });
+        await _context.SaveChangesAsync();
+    }
+
     public async Task UpdateFlashcardAsync(FlashcardDTO flashcard)
     {
         var existingFlashcard = await _context.Flashcards.FindAsync(flashcard.Id);

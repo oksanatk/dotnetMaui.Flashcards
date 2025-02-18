@@ -25,6 +25,8 @@ public static class MauiProgram
         builder.Services.AddTransient<ManageStacksPage>();
         builder.Services.AddTransient<ManageFlashcardsPage>();
         builder.Services.AddTransient<ManageFlashcardsViewModel>();
+        builder.Services.AddTransient<StudyPage>();
+        builder.Services.AddTransient<StudyViewModel>();
         //builder.Services.AddSingleton<MainPage>();
         //builder.Services.AddSingleton<AppShell>();
 
