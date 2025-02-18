@@ -13,10 +13,13 @@ public partial class ManageFlashcardsViewModel : ObservableObject, IQueryAttribu
     public string StackTitle { get; private set; } = null!;
     public ObservableCollection<FlashcardDTO> AllFlashcards { get; private set; } = new();
 
-    public string NewFront { get; set; }
-    public string NewBack { get; set; }
-    public bool IsCreatingFlashcard { get; set; } 
-    public bool IsNotCreatingFlashcard { get => !IsCreatingFlashcard; }
+    public string NewFront { get; set; } = null!;
+    public string NewBack { get; set; } = null!;
+    public FlashcardDTO? SelectedFlashcard { get; set; }
+    public bool IsCreatingFlashcard { get; private set; } 
+    public bool IsModifyingFlashcard { get => SelectedFlashcard != null; }
+    public bool IsNotCreatingModifyingFlashcard { get => !(IsCreatingFlashcard || IsModifyingFlashcard); }
+
 
     public ManageFlashcardsViewModel(DbRepository repository)
     {
@@ -52,34 +55,66 @@ public partial class ManageFlashcardsViewModel : ObservableObject, IQueryAttribu
         }
     }
 
+    [RelayCommand]
+    public void ModifyFlashcard(FlashcardDTO updateSelectedFlashcard)
+    {
+        SelectedFlashcard = updateSelectedFlashcard;
+        OnPropertyChanged(nameof(IsModifyingFlashcard));
+        OnPropertyChanged(nameof(IsNotCreatingModifyingFlashcard));
+    }
+
+    [RelayCommand]
+    public async Task SubmitUpdateInfo()
+    {
+        if (!string.IsNullOrWhiteSpace(NewFront) && !string.IsNullOrWhiteSpace(NewBack) && SelectedFlashcard !=null)
+        {
+            SelectedFlashcard.Front = NewFront;
+            SelectedFlashcard.Back = NewBack;
+
+            await _repository.UpdateFlashcardAsync(SelectedFlashcard);
+            LoadFlashcards();
+            SelectedFlashcard = null;
+            NewFront = string.Empty;
+            NewBack = string.Empty;
+
+            OnPropertyChanged(nameof(IsNotCreatingModifyingFlashcard));
+            OnPropertyChanged(nameof(IsModifyingFlashcard));
+            OnPropertyChanged(nameof(NewFront));
+            OnPropertyChanged(nameof(NewBack));
+        }
+    }
+
+    [RelayCommand]
+    public async Task DeleteFlashcard(FlashcardDTO flashcardToDelete)
+    {
+        await _repository.DeleteFlashcardAsync(flashcardToDelete);
+        LoadFlashcards();
+    }
+
 
     [RelayCommand]
     public void NewFlashcardButton()
     {
-        // display entries for front, back, and submit. 
-        // make the collectionView invisible
-        // in an mvvm-friendly format
-
-        // okay, okay - before I ask chatgpt, let me at least make a guess-attempt at some of the elements that would be required, 
-        // so that at least I only need chatgpt for  the missing pieces, not everything. 
-
-        // I'll need the input for. 2 entries and a submit button. 
-        // okay, made!
-        // the part I'm stuck at: how to adjust visibility if I'm not using x:name= formatting
         IsCreatingFlashcard = true;
+        OnPropertyChanged(nameof(IsNotCreatingModifyingFlashcard));
+        OnPropertyChanged(nameof(IsCreatingFlashcard)); 
     }
 
     [RelayCommand]
-    public void SubmitNewFlashcardInfo()
+    public async Task SubmitNewFlashcardInfo()
     {
         if (string.IsNullOrWhiteSpace(NewFront) || string.IsNullOrWhiteSpace(NewBack)) return;
 
-        _repository.CreateNewFlashcard(StackId, NewFront, NewBack);
+        await _repository.CreateNewFlashcard(StackId, NewFront, NewBack);
 
-        LoadFlashcards();
+        IsCreatingFlashcard = false;
         NewFront = string.Empty;
         NewBack = string.Empty;
-        IsCreatingFlashcard = false;
+
+        OnPropertyChanged(nameof(IsCreatingFlashcard));
+        OnPropertyChanged(nameof(IsNotCreatingModifyingFlashcard));
+
+        LoadFlashcards();
     }
 
 

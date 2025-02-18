@@ -16,7 +16,8 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-            <Grid Padding="50,10,50,10"
+            <Grid IsVisible="{Binding IsNotCreatingModifyingFlashcard}"
+                  Padding="50,10,50,10"
                   RowDefinitions="*,50"
                   ColumnDefinitions="*,*,*,*,*">
                 <Label Grid.Column="0" Text="ID"/>
@@ -24,10 +25,8 @@
                 <Label Grid.Column="2" Text="Back"/>
             </Grid>
 
-            <Label Text="{Binding IsNotCreatingFlashcard}"/>
-
             <CollectionView ItemsSource="{Binding AllFlashcards}"
-                            IsVisible="{Binding IsNo}">
+                            IsVisible="{Binding IsNotCreatingModifyingFlashcard}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:FlashcardDTO}">
                         <Grid RowDefinitions="*,50"
@@ -39,30 +38,45 @@
 
                             <Button Grid.Column="3" 
                                     Text="Modify" 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageFlashcardsViewModel}}, Path=ModifyFlashcardCommand}"/>
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageFlashcardsViewModel}}, Path=ModifyFlashcardCommand}"
+                                    CommandParameter="{Binding .}"/>
                             <Button Grid.Column="4" 
                                     Text="Delete" 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageFlashcardsViewModel}}, Path=DeleteFlashcardCommand}"/>
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageFlashcardsViewModel}}, Path=DeleteFlashcardCommand}"
+                                    CommandParameter="{Binding .}"/>
                             
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Button 
+            <Button IsVisible="{Binding IsNotCreatingModifyingFlashcard}"
                     Text="Add a New Flashcard"
                     Command="{Binding NewFlashcardButtonCommand}"
                     MaximumWidthRequest="300"/>
             
             <VerticalStackLayout
-                IsVisible="{Binding IsCreatingFlashcard}">
+                IsVisible="{Binding IsCreatingFlashcard}"
+                Spacing="15">
                 <Label Text="Input New Flashcard Info:"/>
                 <Entry Placeholder="Front Text"
-                       Text="{Binding NewFront, Mode=TwoWay}"/>
+                       Text="{Binding NewFront}"/>
                 <Entry Placeholder="Back Text"
-                       Text="{Binding NewBack, Mode=TwoWay}"/>
+                       Text="{Binding NewBack}"/>
                 <Button Text="Submit"
                         Command="{Binding SubmitNewFlashcardInfoCommand}"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout
+                IsVisible="{Binding IsModifyingFlashcard}"
+                Spacing="15">
+                <Label Text="Input Updated Flashcard Info:"/>
+                <Entry Placeholder="Front Text"
+                       Text="{Binding NewFront}"/>
+                <Entry Placeholder="Back Text"
+                       Text="{Binding NewBack}"/>
+                <Button Text="Submit"
+                        Command="{Binding SubmitUpdateInfoCommand}"/>
             </VerticalStackLayout>
 
             <Button

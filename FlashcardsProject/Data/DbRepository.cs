@@ -43,9 +43,30 @@ public class DbRepository
         return _context.Stacks.Find(stackId);
     }
 
-    public void CreateNewFlashcard(int stackId, string front, string back)
+    public async Task CreateNewFlashcard(int stackId, string front, string back)
     {
-        _context.Flashcards.Add(new Flashcard { StackId = stackId, Front = front, Back = back });
-        _context.SaveChanges();
+        await _context.Flashcards.AddAsync(new Flashcard { StackId = stackId, Front = front, Back = back });
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateFlashcardAsync(FlashcardDTO flashcard)
+    {
+        var existingFlashcard = await _context.Flashcards.FindAsync(flashcard.Id);
+        if (existingFlashcard != null)
+        {
+            existingFlashcard.Front = flashcard.Front;
+            existingFlashcard.Back = flashcard.Back;
+        }
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteFlashcardAsync(FlashcardDTO flashcard)
+    {
+        var toBeDeleted = await _context.Flashcards.FindAsync(flashcard.Id);
+        if (toBeDeleted != null)
+        {
+            _context.Remove(toBeDeleted);
+            await _context.SaveChangesAsync();
+        }
     }
 }
