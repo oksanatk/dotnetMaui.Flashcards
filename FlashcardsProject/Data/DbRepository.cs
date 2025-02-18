@@ -1,6 +1,7 @@
 ﻿using dotnetMAUI.Flashcards.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
+using Windows.ApplicationModel.Background;
 
 namespace dotnetMAUI.Flashcards.Data;
 
@@ -12,8 +13,6 @@ public class DbRepository
     {
         _context = context;
     }
-
-    // TODO -- methods here to... get/read entities, add new entities to database, update, delete (CRUD operations here?)
     
     public async Task<List<Stack>> GetAllStacksAsync()
     {
@@ -38,9 +37,14 @@ public class DbRepository
             .ToList();
     }
 
-    public Stack GetStackById(int stackId)
+    public async Task<Stack> GetStackById(int stackId)
     {
-        return _context.Stacks.Find(stackId);
+        var foundStack = await _context.Stacks.FindAsync(stackId);
+        if (foundStack != null)
+        {
+            return foundStack;
+        }
+        return new Stack();
     }
 
     public async Task CreateNewStack(string stackName)

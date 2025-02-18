@@ -22,6 +22,10 @@ public class AppDbContext : DbContext
             .WithMany(s => s.StudySessions)
             .HasForeignKey(ss => ss.StackId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Stack>()
+            .HasIndex(s => s.Name)
+            .IsUnique();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

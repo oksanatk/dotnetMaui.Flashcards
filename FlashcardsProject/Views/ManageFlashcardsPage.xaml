@@ -32,7 +32,7 @@
                         <Grid RowDefinitions="*,50"
                               ColumnDefinitions="*,*,*,*,*"
                               Padding="50,10,50,10">
-                            <Label Grid.Column="0" Text="{Binding Id}"/>
+                            <Label Grid.Column="0" Text="{Binding DisplayNum}"/>
                             <Label Grid.Column="1" Text="{Binding Front}"/>
                             <Label Grid.Column="2" Text="{Binding Back}"/>
 

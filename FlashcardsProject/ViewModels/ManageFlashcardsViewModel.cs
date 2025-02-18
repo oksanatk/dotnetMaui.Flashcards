@@ -43,17 +43,22 @@ public partial class ManageFlashcardsViewModel : ObservableObject, IQueryAttribu
 
     private void LoadStackName()
     {
-        Stack currentStack = _repository.GetStackById(StackId);
+        Stack currentStack = _repository.GetStackById(StackId).Result;
         StackTitle = $"Manage {currentStack.Name} Stack";
         //OnPropertyChanged(nameof(StackTitle));
     }
 
     private void LoadFlashcards()
     {
+        int counter = 1;
+
         AllFlashcards.Clear();
         List<FlashcardDTO> flashcards = _repository.GetAllFlashcardsDisplay(StackId);
+
         foreach (FlashcardDTO f in flashcards)
         {
+            f.DisplayNum = counter;
+            counter++;
             AllFlashcards.Add(f);
         }
     }
