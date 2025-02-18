@@ -3,12 +3,15 @@ using CommunityToolkit.Mvvm.Input;
 using dotnetMAUI.Flashcards.Data;
 using dotnetMAUI.Flashcards.Models;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace dotnetMAUI.Flashcards.ViewModels;
 
 public partial class ManageFlashcardsViewModel : ObservableObject, IQueryAttributable
 {
     private readonly DbRepository _repository;
+
     public int StackId { get; private set; }
     public string StackTitle { get; private set; } = null!;
     public ObservableCollection<FlashcardDTO> AllFlashcards { get; private set; } = new();
@@ -20,11 +23,11 @@ public partial class ManageFlashcardsViewModel : ObservableObject, IQueryAttribu
     public bool IsModifyingFlashcard { get => SelectedFlashcard != null; }
     public bool IsNotCreatingModifyingFlashcard { get => !(IsCreatingFlashcard || IsModifyingFlashcard); }
 
-
     public ManageFlashcardsViewModel(DbRepository repository)
     {
         _repository = repository;
     }
+
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
@@ -42,7 +45,7 @@ public partial class ManageFlashcardsViewModel : ObservableObject, IQueryAttribu
     {
         Stack currentStack = _repository.GetStackById(StackId);
         StackTitle = $"Manage {currentStack.Name} Stack";
-        OnPropertyChanged(nameof(StackTitle));
+        //OnPropertyChanged(nameof(StackTitle));
     }
 
     private void LoadFlashcards()
@@ -97,7 +100,9 @@ public partial class ManageFlashcardsViewModel : ObservableObject, IQueryAttribu
     {
         IsCreatingFlashcard = true;
         OnPropertyChanged(nameof(IsNotCreatingModifyingFlashcard));
-        OnPropertyChanged(nameof(IsCreatingFlashcard)); 
+        OnPropertyChanged(nameof(IsCreatingFlashcard));
+        OnPropertyChanged(nameof(NewFront));
+        OnPropertyChanged(nameof(NewBack));
     }
 
     [RelayCommand]
@@ -116,7 +121,6 @@ public partial class ManageFlashcardsViewModel : ObservableObject, IQueryAttribu
 
         LoadFlashcards();
     }
-
 
     [RelayCommand]
     Task GoBackToStacks() => Shell.Current.GoToAsync("..");

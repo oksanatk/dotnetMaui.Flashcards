@@ -43,6 +43,17 @@ public class DbRepository
         return _context.Stacks.Find(stackId);
     }
 
+    public async Task CreateNewStack(string stackName)
+    {
+        bool stackExists = await _context.Stacks.AnyAsync(s => s.Name == stackName);
+        if (stackExists)
+        {
+            return;
+        }
+        await _context.Stacks.AddAsync(new Stack { Name = stackName });
+        await _context.SaveChangesAsync();
+    }
+
     public async Task CreateNewFlashcard(int stackId, string front, string back)
     {
         await _context.Flashcards.AddAsync(new Flashcard { StackId = stackId, Front = front, Back = back });
@@ -63,6 +74,16 @@ public class DbRepository
     public async Task DeleteFlashcardAsync(FlashcardDTO flashcard)
     {
         var toBeDeleted = await _context.Flashcards.FindAsync(flashcard.Id);
+        if (toBeDeleted != null)
+        {
+            _context.Remove(toBeDeleted);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task DeleteStack(Stack selectedStack)
+    {
+        var toBeDeleted = await _context.Stacks.FindAsync(selectedStack.Id);
         if (toBeDeleted != null)
         {
             _context.Remove(toBeDeleted);

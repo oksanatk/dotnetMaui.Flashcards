@@ -16,7 +16,7 @@
                 HorizontalOptions="Center" 
                 FontSize="28"/>
 
-            <Grid 
+            <Grid IsVisible="{Binding IsNotCreatingStack}"
                 Padding="50,15,50,10"
                 RowDefinitions="50"
                   ColumnDefinitions="*,*,*,*">
@@ -24,7 +24,8 @@
                 <Label Grid.Column="1" Text="Name"/>
             </Grid>
 
-            <CollectionView ItemsSource="{Binding AllStacks}">
+            <CollectionView ItemsSource="{Binding AllStacks}"
+                            IsVisible="{Binding IsNotCreatingStack}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:Stack}">
                         <Grid RowDefinitions="*,50"
@@ -40,17 +41,26 @@
                                     CommandParameter="{Binding Id}"/>
                             <Button Grid.Column="3" 
                                     Text="Delete" 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageStacksViewModel}}, Path=DeleteStackCommand}"/>
-
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ManageStacksViewModel}}, Path=DeleteStackCommand}"
+                                    CommandParameter="{Binding .}"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Button 
+            <Button IsVisible="{Binding IsNotCreatingStack}"
                     Text="Add a New Stack"
                     Command="{Binding NewStackCommand}"
                     MaximumWidthRequest="300"/>
+
+            <VerticalStackLayout IsVisible="{Binding IsCreatingStack}"
+                                 Spacing="15">
+                <Label Text="New Stack Name:"/>
+                <Entry Placeholder="Name" Text="{Binding NewStackName}"/>
+                <Button Text="Submit"
+                        Command="{Binding SubmitNewStackCommand}"
+                        MaximumWidthRequest="200"/>
+            </VerticalStackLayout>
 
             <Button
                 Text="Back to Home"
