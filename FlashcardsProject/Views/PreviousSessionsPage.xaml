@@ -2,34 +2,33 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:dotnetMAUI.Flashcards.ViewModels"
+             xmlns:models="clr-namespace:dotnetMAUI.Flashcards.Models"
              x:Class="dotnetMAUI.Flashcards.Views.PreviousSessionsPage"
              x:DataType="viewmodels:PreviousSessionsViewModel">
-    <ContentPage.BindingContext>
-        <viewmodels:PreviousSessionsViewModel/>
-    </ContentPage.BindingContext>
 
     <ScrollView>
-        <VerticalStackLayout>
+        <VerticalStackLayout Padding="20,15,20,50">
             <Label 
             Text="Previous Study Sessions"
             VerticalOptions="Center" 
             HorizontalOptions="Center" 
             FontSize="32"/>
-            <Grid Padding="50,10,50,10"
+            <Grid Padding="50,20,50,10"
               RowDefinitions="*,50"
               ColumnDefinitions="*,*,*">
-                <Label Grid.Column="0" Text="Date Studied"/>
-                <Label Grid.Column="1" Text="Stack Studied"/>
-                <Label Grid.Column="2" Text="Score"/>
+                <Label Grid.Column="0" Text="Date Studied" FontSize="16"/>
+                <Label Grid.Column="1" Text="Stack Studied" FontSize="16"/>
+                <Label Grid.Column="2" Text="Score (%)" FontSize="16"/>
             </Grid>
 
-            <CollectionView>
+            <CollectionView ItemsSource="{Binding AllStudySessions}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid RowDefinitions="*,50"
-                          ColumnDefinitions="*,*,*">
-                            <Label Grid.Column="0" Text="{Binding DateStudied}"/>
-                            <Label Grid.Column="1" Text="{Binding StackName}"/>
+                    <DataTemplate x:DataType="{x:Type models:StudySession}">
+                        <Grid RowDefinitions="*,25"
+                          ColumnDefinitions="*,*,*"
+                              Padding="50,0,50,10">
+                            <Label Grid.Column="0" Text="{Binding DateStudied, StringFormat='{}{0:MM/dd/yyyy}'}"/>
+                            <Label Grid.Column="1" Text="{Binding Stack.Name}"/>
                             <Label Grid.Column="2" Text="{Binding Score}"/>
                         </Grid>
                     </DataTemplate>

@@ -1,7 +1,5 @@
 ﻿using dotnetMAUI.Flashcards.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
-using Windows.ApplicationModel.Background;
 
 namespace dotnetMAUI.Flashcards.Data;
 

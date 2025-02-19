@@ -1,7 +1,6 @@
 ﻿using dotnetMAUI.Flashcards.Data;
 using dotnetMAUI.Flashcards.ViewModels;
 using dotnetMAUI.Flashcards.Views;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace dotnetMAUI.Flashcards;
@@ -27,8 +26,8 @@ public static class MauiProgram
         builder.Services.AddTransient<ManageFlashcardsViewModel>();
         builder.Services.AddTransient<StudyPage>();
         builder.Services.AddTransient<StudyViewModel>();
-        //builder.Services.AddSingleton<MainPage>();
-        //builder.Services.AddSingleton<AppShell>();
+        builder.Services.AddTransient<PreviousSessionsPage>();
+        builder.Services.AddTransient<PreviousSessionsViewModel>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

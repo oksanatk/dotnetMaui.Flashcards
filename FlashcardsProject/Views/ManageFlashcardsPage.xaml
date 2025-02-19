@@ -17,8 +17,8 @@
             HorizontalOptions="Center" />
 
             <Grid IsVisible="{Binding IsNotCreatingModifyingFlashcard}"
-                  Padding="50,10,50,10"
-                  RowDefinitions="*,50"
+                  Padding="50,0,50,10"
+                  RowDefinitions="*,10"
                   ColumnDefinitions="*,*,*,*,*">
                 <Label Grid.Column="0" Text="ID"/>
                 <Label Grid.Column="1" Text="Front"/>
@@ -29,7 +29,7 @@
                             IsVisible="{Binding IsNotCreatingModifyingFlashcard, Mode=TwoWay}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:FlashcardDTO}">
-                        <Grid RowDefinitions="*,50"
+                        <Grid RowDefinitions="*,15"
                               ColumnDefinitions="*,*,*,*,*"
                               Padding="50,10,50,10">
                             <Label Grid.Column="0" Text="{Binding DisplayNum}"/>

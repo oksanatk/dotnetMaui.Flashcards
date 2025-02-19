@@ -3,8 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using dotnetMAUI.Flashcards.Data;
 using dotnetMAUI.Flashcards.Models;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 
 namespace dotnetMAUI.Flashcards.ViewModels;
 
@@ -45,7 +43,7 @@ public partial class ManageFlashcardsViewModel : ObservableObject, IQueryAttribu
     {
         Stack currentStack = _repository.GetStackById(StackId).Result;
         StackTitle = $"Manage {currentStack.Name} Stack";
-        //OnPropertyChanged(nameof(StackTitle));
+        OnPropertyChanged(nameof(StackTitle));
     }
 
     private void LoadFlashcards()

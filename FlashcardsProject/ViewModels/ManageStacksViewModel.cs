@@ -3,8 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using dotnetMAUI.Flashcards.Data;
 using dotnetMAUI.Flashcards.Models;
 using dotnetMAUI.Flashcards.Views;
-using Microsoft.UI.Composition;
-using Microsoft.UI.Xaml.Documents;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
