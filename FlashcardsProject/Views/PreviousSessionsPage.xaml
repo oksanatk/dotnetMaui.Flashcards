@@ -13,27 +13,65 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" 
             FontSize="32"/>
-            <Grid Padding="50,20,50,10"
-              RowDefinitions="*,50"
-              ColumnDefinitions="*,*,*">
-                <Label Grid.Column="0" Text="Date Studied" FontSize="16"/>
-                <Label Grid.Column="1" Text="Stack Studied" FontSize="16"/>
-                <Label Grid.Column="2" Text="Score (%)" FontSize="16"/>
+
+            <Grid RowDefinitions="*"
+                  ColumnDefinitions="*,*"
+                  Padding="200,10,200,20"
+                  ColumnSpacing="20">
+                <Button Grid.Column="0" Text="View All"/>
+                <Button Grid.Column="1" Text="View Monthly Stats"/>
             </Grid>
 
-            <CollectionView ItemsSource="{Binding AllStudySessions}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type models:StudySession}">
-                        <Grid RowDefinitions="*,25"
-                          ColumnDefinitions="*,*,*"
-                              Padding="50,0,50,10">
-                            <Label Grid.Column="0" Text="{Binding DateStudied, StringFormat='{}{0:MM/dd/yyyy}'}"/>
-                            <Label Grid.Column="1" Text="{Binding Stack.Name}"/>
-                            <Label Grid.Column="2" Text="{Binding Score}"/>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <VerticalStackLayout IsVisible="{Binding ChooseViewStats}">
+                
+                <Grid IsVisible="{Binding NeedToChooseYear}"
+                      RowDefinitions="*"
+                      ColumnDefinitions="*,*,*"
+                      ColumnSpacing="10"
+                      Padding="100,10,100,20">
+                    <Entry Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           Placeholder="Enter Year (yyyy)"
+                           Text="{Binding YearForStats}"/>
+                    <Button Grid.Column="2"
+                            Text="Submit"
+                            Command="{Binding SubmitYearForStatsCommand}"/>
+                </Grid>
+
+                <CollectionView ItemsSource="{Binding SessionsPerMonthStats}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                
+            </VerticalStackLayout>
+
+
+            <VerticalStackLayout IsVisible="{Binding ChooseViewAllSessions}">
+                <Grid Padding="50,20,50,10"
+                      RowDefinitions="*,50"
+                      ColumnDefinitions="*,*,*">
+                    <Label Grid.Column="0" Text="Date Studied" FontSize="16"/>
+                    <Label Grid.Column="1" Text="Stack Studied" FontSize="16"/>
+                    <Label Grid.Column="2" Text="Score (%)" FontSize="16"/>
+                </Grid>
+
+                <CollectionView ItemsSource="{Binding AllStudySessions}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type models:StudySession}">
+                            <Grid RowDefinitions="*,25"
+                                  ColumnDefinitions="*,*,*"
+                                  Padding="50,0,50,10">
+                                <Label Grid.Column="0" Text="{Binding DateStudied, StringFormat='{}{0:MM/dd/yyyy}'}"/>
+                                <Label Grid.Column="1" Text="{Binding Stack.Name}"/>
+                                <Label Grid.Column="2" Text="{Binding Score}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
 
             <Button
                 Text="Back to Home"
