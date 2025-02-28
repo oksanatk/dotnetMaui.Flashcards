@@ -1,5 +1,6 @@
 ﻿using dotnetMAUI.Flashcards.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace dotnetMAUI.Flashcards.Data;
 
@@ -97,5 +98,30 @@ public class DbRepository
             _context.Remove(toBeDeleted);
             await _context.SaveChangesAsync();
         }
+    }
+
+    public async Task<List<StudySessionPivotDTO>> GetPivotedStudySessionsAsync(int year)
+    {
+        var studySessions = await _context.StudySessions
+            .Where(s => s.DateStudied.Year == year)
+            .GroupBy(s => new { s.StackId, s.Stack.Name, s.DateStudied.Month })
+            .Select(g => new
+            {
+                g.Key.Name,
+                Month = g.Key.Month,
+                Count = g.Count()
+            })
+            .ToListAsync();
+
+        var pivotedTable = studySessions
+            .GroupBy(s => s.Name)
+            .Select(g => new StudySessionPivotDTO
+            {
+                StackName = g.Key,
+                MonthlyCounts = g.ToDictionary(x => CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x.Month), x => x.Count)
+            })
+            .ToList();
+
+        return pivotedTable;
     }
 }

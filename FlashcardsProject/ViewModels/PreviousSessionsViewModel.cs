@@ -3,6 +3,8 @@ using dotnetMAUI.Flashcards.Data;
 using dotnetMAUI.Flashcards.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace dotnetMAUI.Flashcards.ViewModels;
 
@@ -12,27 +14,41 @@ public partial class PreviousSessionsViewModel : INotifyPropertyChanged
     private int statsYear;
     private string yearForStats = null!;
     private bool chooseViewallSessions = true;
+    private bool needToChooseYear = true;
 
     public ObservableCollection<StudySession> AllStudySessions { get; set; } = new();
-    public string YearForStats { 
-        get => yearForStats; 
-        set { 
-            yearForStats = value; 
-            OnPropertyChanged(nameof(YearForStats)); 
+    public ObservableCollection<StudySessionPivotDTO> PivotedSessions { get; set; } = new();
+    public string YearForStats {
+        get => yearForStats;
+        set {
+            yearForStats = value;
+            OnPropertyChanged(nameof(YearForStats));
         } }
-    public bool ChooseViewAllSessions { 
-        get => chooseViewallSessions; 
-        set { 
+    public bool ChooseViewAllSessions {
+        get => chooseViewallSessions;
+        set {
             chooseViewallSessions = value;
             OnPropertyChanged(nameof(ChooseViewAllSessions));
             OnPropertyChanged(nameof(ChooseViewStats));
         } }
     public bool ChooseViewStats => !ChooseViewAllSessions;
 
+    public bool NeedToChooseYear
+    {
+        get => needToChooseYear;
+        set
+        {
+            needToChooseYear = value;
+            OnPropertyChanged(nameof(NeedToChooseYear));
+            OnPropertyChanged(nameof(NotNeedToChooseYear));
+        }
+    }
+
+    public object NotNeedToChooseYear => !NeedToChooseYear;
+
     public event PropertyChangedEventHandler PropertyChanged;
-    protected void OnPropertyChanged(string propertyName) =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    
+
+
     public PreviousSessionsViewModel(DbRepository repository)
     {
         _repository = repository;
@@ -43,6 +59,8 @@ public partial class PreviousSessionsViewModel : INotifyPropertyChanged
     {
         _ = LoadSessions();
     }
+    protected void OnPropertyChanged(string propertyName) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     private async Task LoadSessions()
     {
@@ -54,13 +72,44 @@ public partial class PreviousSessionsViewModel : INotifyPropertyChanged
     }
 
     [RelayCommand]
-    public void SubmitYearForStats()
+    public void ShowStatsDisplay()
     {
-        if(int.TryParse(YearForStats, out statsYear))
+        ChooseViewAllSessions = false;
+    }
+
+    [RelayCommand]
+    public async Task SubmitYearForStats()
+    {
+        DateTimeFormatInfo currentDateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
+
+        if (int.TryParse(YearForStats, out statsYear))
         {
-            //_repository.GetSessionsPerMonth(statsYear);
-            //_repository.GetAverageScoresPerMonths(statsYear);
+            NeedToChooseYear = false;
+
+            var pivoted = await _repository.GetPivotedStudySessionsAsync(statsYear);
+            foreach(StudySessionPivotDTO stackData in pivoted)
+            {
+                foreach(var month in currentDateTimeFormat.MonthNames.Where(m => !string.IsNullOrEmpty(m)))
+                {
+                    if (!stackData.MonthlyCounts.ContainsKey(month))
+                    {
+                        stackData.MonthlyCounts[month] = 0;
+                    }
+                }
+            }
+            PivotedSessions.Clear();
+            foreach (StudySessionPivotDTO s in pivoted)
+            {
+                PivotedSessions.Add(s);
+            }
         }
+    }
+
+    [RelayCommand]
+    private async Task ViewAllSessions()
+    {
+        ChooseViewAllSessions = true;
+        await LoadSessions();
     }
 
     [RelayCommand]
