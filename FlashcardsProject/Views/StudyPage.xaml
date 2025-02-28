@@ -10,7 +10,7 @@
         <VerticalStackLayout
         Spacing="20"
         Padding="15,20,15,50">
-            <Label 
+            <Label  IsVisible="{Binding HasNotChosenStack}"
                     Text="Study"
                     VerticalOptions="Center" 
                     HorizontalOptions="Center" 
@@ -44,7 +44,8 @@
                                  Spacing="20"
                                  Padding="100,10,100,10">
                 <Label Text="{Binding CurrentFlashcard.Front}"
-                       HorizontalOptions="Center"/>
+                       HorizontalOptions="Center"
+                       FontSize="30"/>
                 <Entry Placeholder="Your Answer" 
                        Text="{Binding UserAnswer}"/>
                 <Button Text="Submit"
@@ -52,7 +53,7 @@
             </VerticalStackLayout>
 
             <Label IsVisible="{Binding HasCompletedGame}"
-                   Text="{Binding Score}"
+                   Text="{Binding ScoreText}"
                    FontSize="30"
                    HorizontalOptions="Center"/>
             <Button

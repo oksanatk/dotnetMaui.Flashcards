@@ -3,31 +3,91 @@ using CommunityToolkit.Mvvm.Input;
 using dotnetMAUI.Flashcards.Data;
 using dotnetMAUI.Flashcards.Models;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using Windows.UI.Core;
 
 namespace dotnetMAUI.Flashcards.ViewModels;
 
-public partial class StudyViewModel : ObservableObject
+public partial class StudyViewModel : INotifyPropertyChanged
 {
     private readonly DbRepository _repository;
     private List<FlashcardDTO> studyFlashcards = new();
+    private FlashcardDTO currentFlashcard = null!;
     private Random random = new();
     private int questionsLeft = 3;
     private int numberCorrect = 0;
+    private string userAnswer = "";
+    private int score;
+    private bool hasNotChosenStack = true;
+    private bool hasCompletedGame = false;
 
     public ObservableCollection<Stack> AllStacks { get; set; } = new();
     public Stack StudyStack { get; set; } = null!;
-    public FlashcardDTO CurrentFlashcard { get; private set; } = null!;
-    public string UserAnswer { get; set; } = null!;
+    public FlashcardDTO CurrentFlashcard
+    {
+        get => currentFlashcard;
+        set
+        {
+            currentFlashcard = value;
+            OnPropertyChanged(nameof(CurrentFlashcard));
+        }
+    }
+    public string UserAnswer
+    {
+        get => userAnswer;
+        set
+        {
+            userAnswer = value;
+            OnPropertyChanged(nameof(UserAnswer));
+        }
+    }
     public bool UserAnsweredCorrectly { get; set; } = false;
-    public bool IsPlayingGame { get => !(HasNotChosenStack || HasCompletedGame); }
-    public bool HasNotChosenStack { get; set; } = true;
-    public bool HasCompletedGame { get; set; } = false;
-    public int Score { get => (int)(numberCorrect / 3.0 * 100); }
+    public bool IsPlayingGame => !(HasNotChosenStack || HasCompletedGame);
+    public bool HasNotChosenStack
+    {
+        get => hasNotChosenStack;
+        set
+        {
+            hasNotChosenStack = value;
+            OnPropertyChanged(nameof(HasNotChosenStack));
+            OnPropertyChanged(nameof(IsPlayingGame));
+        }
+    }
+    public bool HasCompletedGame
+    {
+        get => hasCompletedGame;
+        set
+        {
+            hasCompletedGame = value;
+            OnPropertyChanged(nameof(HasCompletedGame));
+            OnPropertyChanged(nameof(IsPlayingGame));
+        }
+    }
+    public int Score
+    {
+        get => score;
+        set
+        {
+            score = (int)(numberCorrect / 3.0 * 100);
+            OnPropertyChanged(nameof(Score));
+            OnPropertyChanged(nameof(ScoreText));
+        }
+    }                   
+    public string ScoreText
+    {
+        get => $"You Got {Score.ToString()}% Correct!";
+    }
+    public event PropertyChangedEventHandler PropertyChanged = null!;
 
     public StudyViewModel(DbRepository repository)
     {
         _repository = repository;
         _ = InitializeAsync();
+    }
+
+    protected void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     
     private async Task InitializeAsync()
@@ -48,10 +108,7 @@ public partial class StudyViewModel : ObservableObject
     public void ChooseStack(Stack studyStack)
     {
         StudyStack = studyStack;
-
         HasNotChosenStack = false;
-        OnPropertyChanged(nameof(IsPlayingGame));
-        OnPropertyChanged(nameof(HasNotChosenStack));
 
         studyFlashcards = _repository.GetAllFlashcardsDisplay(studyStack.Id);
         
@@ -61,7 +118,6 @@ public partial class StudyViewModel : ObservableObject
     private void DisplayFlashcard()
     {
         CurrentFlashcard = studyFlashcards[random.Next(0, studyFlashcards.Count)];
-        OnPropertyChanged(nameof(CurrentFlashcard));
     }
 
     [RelayCommand]
@@ -69,7 +125,9 @@ public partial class StudyViewModel : ObservableObject
     {
         if (UserAnswer == CurrentFlashcard.Back)
         {
-            numberCorrect++;
+            UserAnsweredCorrectly = true;
+            //await Task.Delay(2500);
+            numberCorrect+=1;
         }
         questionsLeft--;
         if (questionsLeft > 0)
@@ -80,9 +138,6 @@ public partial class StudyViewModel : ObservableObject
         }else
         {
             HasCompletedGame = true;
-            OnPropertyChanged(nameof(IsPlayingGame));
-            OnPropertyChanged(nameof(HasCompletedGame));
-            OnPropertyChanged(nameof(Score));
 
             await _repository.CreateNewStudySession(DateTime.Now, Score, StudyStack.Id);
         }

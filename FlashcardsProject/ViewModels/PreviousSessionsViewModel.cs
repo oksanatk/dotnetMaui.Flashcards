@@ -54,13 +54,13 @@ public partial class PreviousSessionsViewModel : INotifyPropertyChanged
         _repository = repository;
         InitializeAsync();
     }
+    protected void OnPropertyChanged(string propertyName) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     private void InitializeAsync()
     {
         _ = LoadSessions();
     }
-    protected void OnPropertyChanged(string propertyName) =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     private async Task LoadSessions()
     {
