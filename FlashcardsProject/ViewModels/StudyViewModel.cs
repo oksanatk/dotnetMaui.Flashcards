@@ -1,10 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using dotnetMAUI.Flashcards.Data;
 using dotnetMAUI.Flashcards.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Windows.UI.Core;
 
 namespace dotnetMAUI.Flashcards.ViewModels;
 
@@ -17,9 +15,9 @@ public partial class StudyViewModel : INotifyPropertyChanged
     private int questionsLeft = 3;
     private int numberCorrect = 0;
     private string userAnswer = "";
-    private int score;
     private bool hasNotChosenStack = true;
     private bool hasCompletedGame = false;
+    private bool correctCongratsBannerVisible = false;
 
     public ObservableCollection<Stack> AllStacks { get; set; } = new();
     public Stack StudyStack { get; set; } = null!;
@@ -41,7 +39,15 @@ public partial class StudyViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(UserAnswer));
         }
     }
-    public bool UserAnsweredCorrectly { get; set; } = false;
+    public bool CorrectCongratsBannerVisible
+    {
+        get => correctCongratsBannerVisible;
+        set
+        {
+            correctCongratsBannerVisible = value;
+            OnPropertyChanged(nameof(CorrectCongratsBannerVisible));
+        }
+    }
     public bool IsPlayingGame => !(HasNotChosenStack || HasCompletedGame);
     public bool HasNotChosenStack
     {
@@ -63,21 +69,26 @@ public partial class StudyViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(IsPlayingGame));
         }
     }
-    public int Score
+    public int NumberCorrect
     {
-        get => score;
-        set
+        get => numberCorrect;
+        private set
         {
-            score = (int)(numberCorrect / 3.0 * 100);
+            numberCorrect = value;
+            OnPropertyChanged(nameof(NumberCorrect));
             OnPropertyChanged(nameof(Score));
             OnPropertyChanged(nameof(ScoreText));
         }
+    }
+    public int Score
+    {
+        get => (int)(NumberCorrect / 3.0 * 100);
     }                   
     public string ScoreText
     {
         get => $"You Got {Score.ToString()}% Correct!";
     }
-    public event PropertyChangedEventHandler PropertyChanged = null!;
+    public event PropertyChangedEventHandler PropertyChanged;
 
     public StudyViewModel(DbRepository repository)
     {
@@ -125,22 +136,28 @@ public partial class StudyViewModel : INotifyPropertyChanged
     {
         if (UserAnswer == CurrentFlashcard.Back)
         {
-            UserAnsweredCorrectly = true;
-            //await Task.Delay(2500);
-            numberCorrect+=1;
+            _ = ShowCongratsBannerAsync();
+            NumberCorrect+=1;
         }
         questionsLeft--;
         if (questionsLeft > 0)
         {
             UserAnswer = string.Empty;
-            OnPropertyChanged(nameof(UserAnswer));
             DisplayFlashcard();
         }else
         {
             HasCompletedGame = true;
-
+            
             await _repository.CreateNewStudySession(DateTime.Now, Score, StudyStack.Id);
         }
+    }
+
+    private async Task ShowCongratsBannerAsync()
+    {
+        CorrectCongratsBannerVisible = true;
+        await Task.Delay(2500);
+        CorrectCongratsBannerVisible = false;
+
     }
 
     [RelayCommand]

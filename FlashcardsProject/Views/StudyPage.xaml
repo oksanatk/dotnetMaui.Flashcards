@@ -50,6 +50,12 @@
                        Text="{Binding UserAnswer}"/>
                 <Button Text="Submit"
                         Command="{Binding SubmitAnswerCommand}"/>
+                <Label Text="That's Correct!"
+                       FontSize="24"
+                       TextColor="Green"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       IsVisible="{Binding CorrectCongratsBannerVisible}"/>
             </VerticalStackLayout>
 
             <Label IsVisible="{Binding HasCompletedGame}"

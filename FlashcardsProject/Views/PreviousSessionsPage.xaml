@@ -29,7 +29,7 @@
 
             <VerticalStackLayout IsVisible="{Binding ChooseViewStats}"
                                  Padding="10,0,10,20">
-                
+
                 <Grid IsVisible="{Binding NeedToChooseYear}"
                       RowDefinitions="*"
                       ColumnDefinitions="*,*,*"
@@ -48,20 +48,22 @@
                                 IsVisible="{Binding NotNeedToChooseYear}">
                     <CollectionView.Header>
                         <Grid ColumnDefinitions="2*,*,*,*,*,*,*,*,*,*,*,*,*"
+                              RowDefinitions="*,*"
                                Padding="15,15,15,20">
-                            <Label Text="Stack Name" Grid.Column="0" FontAttributes="Bold"/>
-                            <Label Text="Jan" Grid.Column="1" FontAttributes="Bold"/>
-                            <Label Text="Feb" Grid.Column="2" FontAttributes="Bold"/>
-                            <Label Text="Mar" Grid.Column="3" FontAttributes="Bold"/>
-                            <Label Text="Apr" Grid.Column="4" FontAttributes="Bold"/>
-                            <Label Text="May" Grid.Column="5" FontAttributes="Bold"/>
-                            <Label Text="Jun" Grid.Column="6" FontAttributes="Bold"/>
-                            <Label Text="Jul" Grid.Column="7" FontAttributes="Bold"/>
-                            <Label Text="Aug" Grid.Column="8" FontAttributes="Bold"/>
-                            <Label Text="Sep" Grid.Column="9" FontAttributes="Bold"/>
-                            <Label Text="Oct" Grid.Column="10" FontAttributes="Bold"/>
-                            <Label Text="Nov" Grid.Column="11" FontAttributes="Bold"/>
-                            <Label Text="Dec" Grid.Column="12" FontAttributes="Bold"/>
+                            <Label Text="Number of Sessions Per Month" Grid.Row="0" Grid.ColumnSpan="13" FontAttributes="Bold"/>
+                            <Label Text="Stack Name" Grid.Row="1" Grid.Column="0" FontAttributes="Bold"/>
+                            <Label Text="Jan" Grid.Row="1" Grid.Column="1" FontAttributes="Bold"/>
+                            <Label Text="Feb" Grid.Row="1" Grid.Column="2" FontAttributes="Bold"/>
+                            <Label Text="Mar" Grid.Row="1" Grid.Column="3" FontAttributes="Bold"/>
+                            <Label Text="Apr" Grid.Row="1" Grid.Column="4" FontAttributes="Bold"/>
+                            <Label Text="May" Grid.Row="1" Grid.Column="5" FontAttributes="Bold"/>
+                            <Label Text="Jun" Grid.Row="1" Grid.Column="6" FontAttributes="Bold"/>
+                            <Label Text="Jul" Grid.Row="1" Grid.Column="7" FontAttributes="Bold"/>
+                            <Label Text="Aug" Grid.Row="1" Grid.Column="8" FontAttributes="Bold"/>
+                            <Label Text="Sep" Grid.Row="1" Grid.Column="9" FontAttributes="Bold"/>
+                            <Label Text="Oct" Grid.Row="1" Grid.Column="10" FontAttributes="Bold"/>
+                            <Label Text="Nov" Grid.Row="1" Grid.Column="11" FontAttributes="Bold"/>
+                            <Label Text="Dec" Grid.Row="1" Grid.Column="12" FontAttributes="Bold"/>
                         </Grid>
                     </CollectionView.Header>
                     
